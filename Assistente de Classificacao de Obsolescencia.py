@@ -178,7 +178,7 @@ elementos = list(PESOS.keys())
 meio = len(elementos) // 2 + 1
 
 # String padrão para verificar se o vistoriador preencheu
-MENSAGEM_PADRAO = "Selecione a classificação..."
+MENSAGEM_PADRAO = "Selecione a classificação"
 
 for i, elemento in enumerate(elementos):
     coluna_atual = col1 if i < meio else col2
