@@ -174,7 +174,7 @@ with col_logo1:
 
 with col_titulo:
     st.markdown("<h2 style='text-align: center;'>🏢 Assistente de Classificação do Fator de Obsolescência do Imóvel</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center;'>Selecione a descrição real do imóvel. O cálculo do Fob é executado automaticamente.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Selecione a descrição real do imóvel. Selecionados todos os elementos estruturais desça a página e clique no botão "CALCULAR CLASSIFICAÇÃO GERAL". O cálculo do Fob é executado automaticamente.</p>", unsafe_allow_html=True)
 
 with col_logo2:
     # Substitua pelo nome exato do arquivo da prefeitura no GitHub (ex: "logo_prefeitura.png")
