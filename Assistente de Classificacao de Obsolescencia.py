@@ -177,7 +177,7 @@ with col_logo2:
     st.image("SECRETARIA MUNICIPAL DE CUIABÁ.png", use_container_width=True)
 
 # Título logo abaixo das imagens
-st.markdown("<h2 style='text-align: center;'>🏢 Assistente de Classificação do Fator de Obsolescência do Imóvel</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;'>Assistente de Classificação do Fator de Obsolescência do Imóvel</h2>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center;'>Selecione a descrição real do imóvel. Selecionados todos os elementos estruturais desça a página e clique no botão CALCULAR CLASSIFICAÇÃO GERAL. O cálculo do Fob é executado automaticamente.</p>", unsafe_allow_html=True)
 
 st.divider()
@@ -256,7 +256,7 @@ if btn_calcular:
 
         st.markdown("---")
 
-        st.markdown("### 🏆 Enquadramento do Fator de Obsolescência de Acordo com o Decreto Nº 11.665 de 30 de Dezembro de 2025")
+        st.markdown("###Enquadramento do Fator de Obsolescência de Acordo com o Decreto Nº 11.665 de 30 de Dezembro de 2025")
         st.markdown(f"""
             <div class="resultado-box">
                 <h2>Classificação: {resultado_final['classe']}</h2>
