@@ -132,7 +132,7 @@ TABELA_FINAL = {
 # 2. CONFIGURAÇÃO DA INTERFACE (UX/UI) E FUNÇÕES
 # ==========================================
 
-st.set_page_config(page_title="Classificador de Obsolescência", page_icon="🏢", layout="wide")
+st.set_page_config(page_title="Classificador de Obsolescência", page_icon=" ", layout="wide")
 
 MENSAGEM_PADRAO = "Selecione a classificação"
 
