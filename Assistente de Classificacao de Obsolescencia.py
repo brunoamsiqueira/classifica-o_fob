@@ -163,9 +163,23 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🏢 Assistente de Classificação do Fator de Obsolescência do Imóvel")
-st.markdown(
-    "Selecione a descrição real do imóvel. O cálculo do Fob é executado automaticamente.")
+# CABEÇALHO COM AS LOGOS
+st.write("") # Espaçamento inicial
+
+col_logo1, col_titulo, col_logo2 = st.columns([1.5, 6, 1.5], vertical_alignment="center")
+
+with col_logo1:
+    # Substitua pelo nome exato do arquivo da sua empresa no GitHub (ex: "logo_empresa.png")
+    st.image("LOGO TECNOMAPAS.png", use_container_width=True) 
+
+with col_titulo:
+    st.markdown("<h2 style='text-align: center;'>🏢 Assistente de Classificação do Fator de Obsolescência do Imóvel</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Selecione a descrição real do imóvel. O cálculo do Fob é executado automaticamente.</p>", unsafe_allow_html=True)
+
+with col_logo2:
+    # Substitua pelo nome exato do arquivo da prefeitura no GitHub (ex: "logo_prefeitura.png")
+    st.image("SECRETARIA MUNICIPAL DE CUIABÁ.png", use_container_width=True)
+
 st.divider()
 
 # ==========================================
