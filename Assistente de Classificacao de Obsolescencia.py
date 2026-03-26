@@ -1,7 +1,7 @@
 import streamlit as st
 
 # ==========================================
-# 1. BASE DE DADOS E REGRAS (EXTRAÍDAS DO EXCEL!)
+# 1. BASE DE DADOS E REGRAS (EXTRAÍDAS DO EXCEL)
 # ==========================================
 
 PESOS = {
@@ -129,7 +129,7 @@ TABELA_FINAL = {
 }
 
 # ==========================================
-# 2. CONFIGURAÇÃO DA INTERFACE (UX/UI)
+# 2. CONFIGURAÇÃO DA INTERFACE (UX/UI) E FUNÇÕES
 # ==========================================
 
 st.set_page_config(page_title="Classificador de Obsolescência", page_icon="🏢", layout="wide")
@@ -139,29 +139,24 @@ def limpar_dados():
     for key in st.session_state.keys():
         del st.session_state[key]
 
-# O CSS foi aprimorado. O 'var(--text-color)' e 'var(--background-color)' 
-# fazem o Streamlit respeitar o tema Claro/Escuro do celular do usuário.
-# O Javascript no final lida com a mudança de cor do seletor.
 st.markdown("""
     <style>
     .big-font { font-size:20px !important; font-weight: bold; color: #1E3A8A; }
     
-    /* Caixa de resultado adaptável a tema claro/escuro */
     .resultado-box { 
-        background-color: rgba(22, 163, 74, 0.1); /* Verde suave transparente */
+        background-color: rgba(22, 163, 74, 0.1); 
         color: var(--text-color);
         padding: 20px; 
         border-radius: 10px; 
         border-left: 5px solid #16A34A;
     }
     
-    /* O CSS abaixo é um 'truque' para colorir de verde os dropdowns preenchidos */
     div[data-baseweb="select"] {
         transition: all 0.3s ease;
     }
     .st-select-selecionado div[data-baseweb="select"] > div {
-        background-color: rgba(34, 197, 94, 0.15) !important; /* Fundo verdinho claro */
-        border-color: #22C55E !important; /* Borda verde */
+        background-color: rgba(34, 197, 94, 0.15) !important; 
+        border-color: #22C55E !important; 
     }
     </style>
 """, unsafe_allow_html=True)
@@ -177,12 +172,10 @@ st.divider()
 
 selecoes = {}
 
-# Dividindo em duas colunas
 col1, col2 = st.columns(2)
 elementos = list(PESOS.keys())
 meio = len(elementos) // 2 + 1
 
-# String padrão para verificar se o vistoriador preencheu
 MENSAGEM_PADRAO = "Selecione a classificação"
 
 for i, elemento in enumerate(elementos):
@@ -190,26 +183,34 @@ for i, elemento in enumerate(elementos):
     with coluna_atual:
         st.markdown(f"<span class='big-font'>{elemento} (Peso: {PESOS[elemento]}%)</span>", unsafe_allow_html=True)
         
-        # Inserindo a mensagem padrão como a primeira opção da lista
         opcoes_texto = [MENSAGEM_PADRAO] + list(OPCOES[elemento].keys())
         
         escolha = st.selectbox(f"Selecione o estado - {elemento}", opcoes_texto, label_visibility="collapsed", key=f"sel_{elemento}")
         selecoes[elemento] = escolha
         
-        # Injeção de HTML para adicionar uma "classe" CSS que pinta o seletor de verde caso não seja a opção padrão
         if escolha != MENSAGEM_PADRAO:
             st.markdown(f'<style>div[data-testid="stSelectbox"]:has(div[id*="sel_{elemento}"]) {{ background-color: rgba(34, 197, 94, 0.15); border-radius: 0.5rem; }}</style>', unsafe_allow_html=True)
             
-        st.write("")  # Espaçamento
+        st.write("") 
 
 st.divider()
 
 # ==========================================
-# 4. CÁLCULO E EXIBIÇÃO DE RESULTADOS
+# 4. BOTÕES E CÁLCULO DE RESULTADOS
 # ==========================================
 
-if st.button("CALCULAR CLASSIFICAÇÃO GERAL", type="primary", use_container_width=True):
-    # Verificação de Segurança: Garante que todos os campos foram preenchidos
+# Criando colunas para os botões ficarem lado a lado
+col_btn1, col_btn2 = st.columns(2)
+
+with col_btn1:
+    btn_calcular = st.button("CALCULAR CLASSIFICAÇÃO GERAL", type="primary", use_container_width=True)
+
+with col_btn2:
+    # O on_click ativa a função limpar_dados antes de atualizar a página
+    st.button("🔄 NOVA AVALIAÇÃO (Limpar Dados)", on_click=limpar_dados, use_container_width=True)
+
+if btn_calcular:
+    # Verificação com a sintaxe correta do Python (in)
     itens_pendentes = [item for item, desc in selecoes.items() if desc == MENSAGEM_PADRAO]
     
     if itens_pendentes:
@@ -218,7 +219,6 @@ if st.button("CALCULAR CLASSIFICAÇÃO GERAL", type="primary", use_container_wid
         soma_pesos = 0
         soma_contribuicoes = 0
 
-        # Processa exatamente como no Excel
         for elemento, descricao in selecoes.items():
             peso = PESOS[elemento]
             dados_opcao = OPCOES[elemento][descricao]
@@ -231,7 +231,6 @@ if st.button("CALCULAR CLASSIFICAÇÃO GERAL", type="primary", use_container_wid
         nota_final = soma_contribuicoes / soma_pesos if soma_pesos > 0 else 0
         nota_arredondada = int(round(nota_final))
 
-        # Prevenção de erro se a nota sair dos limites (1 a 8)
         nota_arredondada = max(1, min(8, nota_arredondada))
 
         resultado_final = TABELA_FINAL[nota_arredondada]
@@ -244,7 +243,7 @@ if st.button("CALCULAR CLASSIFICAÇÃO GERAL", type="primary", use_container_wid
 
         st.markdown("---")
 
-        st.markdown("### 🏆 Enquadramento do Fator de Obsolescência do Imóvel (Decreto)")
+        st.markdown("### 🏆 Enquadramento do Fator de Obsolescência do Imóvel")
         st.markdown(f"""
             <div class="resultado-box">
                 <h2>Classificação: {resultado_final['classe']}</h2>
