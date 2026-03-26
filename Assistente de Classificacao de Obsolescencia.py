@@ -256,7 +256,7 @@ if btn_calcular:
 
         st.markdown("---")
 
-        st.markdown("###Enquadramento do Fator de Obsolescência de Acordo com o Decreto Nº 11.665 de 30 de Dezembro de 2025")
+        st.markdown("### Enquadramento do Fator de Obsolescência de Acordo com o Decreto Nº 11.665 de 30 de Dezembro de 2025")
         st.markdown(f"""
             <div class="resultado-box">
                 <h2>Classificação: {resultado_final['classe']}</h2>
