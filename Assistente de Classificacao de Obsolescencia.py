@@ -134,10 +134,12 @@ TABELA_FINAL = {
 
 st.set_page_config(page_title="Classificador de Obsolescência", page_icon="🏢", layout="wide")
 
-# Função que limpa os dados salvos na memória da tela
+MENSAGEM_PADRAO = "Selecione a classificação"
+
+# Função de reset forte: Força explicitamente todos os campos a voltarem ao padrão
 def limpar_dados():
-    for key in st.session_state.keys():
-        del st.session_state[key]
+    for elemento in PESOS.keys():
+        st.session_state[f"sel_{elemento}"] = MENSAGEM_PADRAO
 
 st.markdown("""
     <style>
@@ -176,8 +178,6 @@ col1, col2 = st.columns(2)
 elementos = list(PESOS.keys())
 meio = len(elementos) // 2 + 1
 
-MENSAGEM_PADRAO = "Selecione a classificação"
-
 for i, elemento in enumerate(elementos):
     coluna_atual = col1 if i < meio else col2
     with coluna_atual:
@@ -206,11 +206,10 @@ with col_btn1:
     btn_calcular = st.button("CALCULAR CLASSIFICAÇÃO GERAL", type="primary", use_container_width=True)
 
 with col_btn2:
-    # O on_click ativa a função limpar_dados antes de atualizar a página
-    st.button("🔄 NOVA AVALIAÇÃO (Limpar Dados)", on_click=limpar_dados, use_container_width=True)
+    # O on_click ativa a função limpar_dados antes de atualizar a página, forçando a interface a limpar os campos
+    st.button("🔄 NOVA AVALIAÇÃO", on_click=limpar_dados, use_container_width=True)
 
 if btn_calcular:
-    # Verificação com a sintaxe correta do Python (in)
     itens_pendentes = [item for item, desc in selecoes.items() if desc == MENSAGEM_PADRAO]
     
     if itens_pendentes:
@@ -243,7 +242,7 @@ if btn_calcular:
 
         st.markdown("---")
 
-        st.markdown("### 🏆 Enquadramento do Fator de Obsolescência do Imóvel")
+        st.markdown("### 🏆 Enquadramento do Fato de Obsolescência")
         st.markdown(f"""
             <div class="resultado-box">
                 <h2>Classificação: {resultado_final['classe']}</h2>
