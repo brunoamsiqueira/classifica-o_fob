@@ -205,7 +205,7 @@ st.divider()
 
 if st.button("CALCULAR CLASSIFICAÇÃO GERAL", type="primary", use_container_width=True):
     # Verificação de Segurança: Garante que todos os campos foram preenchidos
-    itens_pendentes = [item for item, desc em selecoes.items() if desc == MENSAGEM_PADRAO]
+    itens_pendentes = [item for item, desc in selecoes.items() if desc == MENSAGEM_PADRAO]
     
     if itens_pendentes:
         st.error(f"⚠️ Atenção! Você esqueceu de preencher os seguintes itens: **{', '.join(itens_pendentes)}**.")
