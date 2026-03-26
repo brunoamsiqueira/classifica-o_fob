@@ -1,7 +1,7 @@
 import streamlit as st
 
 # ==========================================
-# 1. BASE DE DADOS E REGRAS (EXTRAÍDAS DO EXCEL)
+# 1. BASE DE DADOS E REGRAS (EXTRAÍDAS DO EXCEL!)
 # ==========================================
 
 PESOS = {
