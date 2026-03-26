@@ -134,6 +134,11 @@ TABELA_FINAL = {
 
 st.set_page_config(page_title="Classificador de Obsolescência", page_icon="🏢", layout="wide")
 
+# Função que limpa os dados salvos na memória da tela
+def limpar_dados():
+    for key in st.session_state.keys():
+        del st.session_state[key]
+
 # O CSS foi aprimorado. O 'var(--text-color)' e 'var(--background-color)' 
 # fazem o Streamlit respeitar o tema Claro/Escuro do celular do usuário.
 # O Javascript no final lida com a mudança de cor do seletor.
