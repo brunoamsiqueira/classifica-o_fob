@@ -18,18 +18,14 @@ PESOS = {
 
 OPCOES = {
     "Estrutura": {
-        "Estrutura em perfeito estado (sem patologias ou necessidade de intervenção estrutural)": {"classe": "ÓTIMO",
-                                                                                                   "nota": 8},
+        "Estrutura em perfeito estado (sem patologias ou necessidade de intervenção estrutural)": {"classe": "ÓTIMO", "nota": 8},
         "Estrutura íntegra (sem necessidade de reparos estruturais)": {"classe": "MUITO BOM", "nota": 7},
         "Estrutura estável (sem comprometimento estrutural)": {"classe": "BOM", "nota": 6},
         "Estrutura estável (ainda sem necessidade de intervenção estrutural)": {"classe": "INTERMEDIÁRIO", "nota": 5},
         "Estrutura sem necessidade de recuperação (sem intervenção estrutural)": {"classe": "REGULAR", "nota": 4},
-        "Estabilização ou recuperação localizada do sistema estrutural (intervenção estrutural pontual)": {
-            "classe": "DEFICIENTE", "nota": 3},
-        "Estabilização ou recuperação de grande parte do sistema estrutural (comprometimento estrutural significativo)": {
-            "classe": "RUIM", "nota": 2},
-        "Estabilização ou recuperação estrutural significativa (estrutura comprometida)": {"classe": "MUITO RUIM",
-                                                                                           "nota": 1}
+        "Estabilização ou recuperação localizada do sistema estrutural (intervenção estrutural pontual)": {"classe": "DEFICIENTE", "nota": 3},
+        "Estabilização ou recuperação de grande parte do sistema estrutural (comprometimento estrutural significativo)": {"classe": "RUIM", "nota": 2},
+        "Estabilização ou recuperação estrutural significativa (estrutura comprometida)": {"classe": "MUITO RUIM", "nota": 1}
     },
     "Cobertura": {
         "Cobertura em bom estado (sem infiltrações ou falhas)": {"classe": "ÓTIMO", "nota": 8},
@@ -37,45 +33,28 @@ OPCOES = {
         "Cobertura em condições normais (sem danos significativos)": {"classe": "BOM", "nota": 6},
         "Possível revisão da cobertura (verificação de telhas e vedação)": {"classe": "INTERMEDIÁRIO", "nota": 5},
         "Revisão necessária (possíveis reparos na impermeabilização ou telhado)": {"classe": "REGULAR", "nota": 4},
-        "Revisão da impermeabilização ou substituição parcial de telhas (reparos na cobertura)": {
-            "classe": "DEFICIENTE", "nota": 3},
-        "Reparações importantes ou substituição parcial do telhado (problemas relevantes de cobertura)": {
-            "classe": "RUIM", "nota": 2},
-        "Substituição da impermeabilização ou do telhado (cobertura sem condições de uso)": {"classe": "MUITO RUIM",
-                                                                                             "nota": 1}
+        "Revisão da impermeabilização ou substituição parcial de telhas (reparos na cobertura)": {"classe": "DEFICIENTE", "nota": 3},
+        "Reparações importantes ou substituição parcial do telhado (problemas relevantes de cobertura)": {"classe": "RUIM", "nota": 2},
+        "Substituição da impermeabilização ou do telhado (cobertura sem condições de uso)": {"classe": "MUITO RUIM", "nota": 1}
     },
     "Acabamento Interno": {
-        "Sem fissuras ou trincas (alvenaria íntegra)/Apenas sinais de desgaste natural na pintura (manutenção estética)": {
-            "classe": "ÓTIMO", "nota": 8},
-        "Sem danos relevantes (alvenaria preservada)/Necessita apenas uma demão leve de pintura (manutenção estética simples)": {
-            "classe": "MUITO BOM", "nota": 7},
-        "Eventuais fissuras e trincas superficiais (pequenas manifestações)/Pintura interna necessária (manutenção comum)": {
-            "classe": "BOM", "nota": 6},
-        "Fissuras e trincas superficiais (desgaste natural da construção)/ Pintura necessita renovação ": {
-            "classe": "INTERMEDIÁRIO", "nota": 5},
-        "Fissuras e trincas superficiais generalizadas e alguns panos de reboco (reparos localizados)/ Pintura interna necessita de restauração do acabamento": {
-            "classe": "REGULAR", "nota": 4},
-        "Reparos em fissuras e trincas (correção de patologias na alvenaria)/ Pintura interna (recuperação estética)": {
-            "classe": "DEFICIENTE", "nota": 3},
-        "Substituição de panos de regularização da alvenaria (reconstrução parcial)/Pintura interna recuperação geral": {
-            "classe": "RUIM", "nota": 2},
+        "Sem fissuras ou trincas (alvenaria íntegra)/Apenas sinais de desgaste natural na pintura (manutenção estética)": {"classe": "ÓTIMO", "nota": 8},
+        "Sem danos relevantes (alvenaria preservada)/Necessita apenas uma demão leve de pintura (manutenção estética simples)": {"classe": "MUITO BOM", "nota": 7},
+        "Eventuais fissuras e trincas superficiais (pequenas manifestações)/Pintura interna necessária (manutenção comum)": {"classe": "BOM", "nota": 6},
+        "Fissuras e trincas superficiais (desgaste natural da construção)/ Pintura necessita renovação ": {"classe": "INTERMEDIÁRIO", "nota": 5},
+        "Fissuras e trincas superficiais generalizadas e alguns panos de reboco (reparos localizados)/ Pintura interna necessita de restauração do acabamento": {"classe": "REGULAR", "nota": 4},
+        "Reparos em fissuras e trincas (correção de patologias na alvenaria)/ Pintura interna (recuperação estética)": {"classe": "DEFICIENTE", "nota": 3},
+        "Substituição de panos de regularização da alvenaria (reconstrução parcial)/Pintura interna recuperação geral": {"classe": "RUIM", "nota": 2},
         "Alvenaria Comprometida/Pintura comprometida ou Sem pintura": {"classe": "MUITO RUIM", "nota": 1}
     },
     "Acabamento Externo": {
-        "Sem fissuras ou trincas (alvenaria íntegra)/Apenas sinais de desgaste natural na pintura (manutenção estética)": {
-            "classe": "ÓTIMO", "nota": 8},
-        "Sem danos relevantes (alvenaria preservada)/Necessita apenas uma demão leve de pintura (manutenção estética simples)": {
-            "classe": "MUITO BOM", "nota": 7},
-        "Eventuais fissuras e trincas superficiais (pequenas manifestações)/Pintura interna necessária (manutenção comum)": {
-            "classe": "BOM", "nota": 6},
-        "Fissuras e trincas superficiais (desgaste natural da construção)/ Pintura necessita renovação ": {
-            "classe": "INTERMEDIÁRIO", "nota": 5},
-        "Fissuras e trincas superficiais generalizadas e alguns panos de reboco (reparos localizados)/ Pintura interna necessita de restauração do acabamento": {
-            "classe": "REGULAR", "nota": 4},
-        "Reparos em fissuras e trincas (correção de patologias na alvenaria)/ Pintura interna (recuperação estética)": {
-            "classe": "DEFICIENTE", "nota": 3},
-        "Substituição de panos de regularização da alvenaria (reconstrução parcial)/Pintura interna recuperação geral": {
-            "classe": "RUIM", "nota": 2},
+        "Sem fissuras ou trincas (alvenaria íntegra)/Apenas sinais de desgaste natural na pintura (manutenção estética)": {"classe": "ÓTIMO", "nota": 8},
+        "Sem danos relevantes (alvenaria preservada)/Necessita apenas uma demão leve de pintura (manutenção estética simples)": {"classe": "MUITO BOM", "nota": 7},
+        "Eventuais fissuras e trincas superficiais (pequenas manifestações)/Pintura interna necessária (manutenção comum)": {"classe": "BOM", "nota": 6},
+        "Fissuras e trincas superficiais (desgaste natural da construção)/ Pintura necessita renovação ": {"classe": "INTERMEDIÁRIO", "nota": 5},
+        "Fissuras e trincas superficiais generalizadas e alguns panos de reboco (reparos localizados)/ Pintura interna necessita de restauração do acabamento": {"classe": "REGULAR", "nota": 4},
+        "Reparos em fissuras e trincas (correção de patologias na alvenaria)/ Pintura interna (recuperação estética)": {"classe": "DEFICIENTE", "nota": 3},
+        "Substituição de panos de regularização da alvenaria (reconstrução parcial)/Pintura interna recuperação geral": {"classe": "RUIM", "nota": 2},
         "Pintura comprometida/Sem pintura": {"classe": "MUITO RUIM", "nota": 1}
     },
     "Instalações Elétricas": {
@@ -84,8 +63,7 @@ OPCOES = {
         "Funcionamento normal (instalações adequadas)": {"classe": "BOM", "nota": 6},
         "Eventual revisão do sistema elétrico (manutenção preventiva)": {"classe": "INTERMEDIÁRIO", "nota": 5},
         "Revisão das instalações elétricas (manutenção corretiva)": {"classe": "REGULAR", "nota": 4},
-        "Revisão geral com substituição eventual de peças desgastadas (troca de componentes)": {"classe": "DEFICIENTE",
-                                                                                                "nota": 3},
+        "Revisão geral com substituição eventual de peças desgastadas (troca de componentes)": {"classe": "DEFICIENTE", "nota": 3},
         "Substituição de peças aparentes (componentes deteriorados)": {"classe": "RUIM", "nota": 2},
         "Substituição completa das instalações (sistemas deteriorados)": {"classe": "MUITO RUIM", "nota": 1}
     },
@@ -95,8 +73,7 @@ OPCOES = {
         "Funcionamento normal (instalações adequadas)": {"classe": "BOM", "nota": 6},
         "Eventual revisão do sistema hidráulico (manutenção preventiva)": {"classe": "INTERMEDIÁRIO", "nota": 5},
         "Revisão das instalações hidráulicas (manutenção corretiva)": {"classe": "REGULAR", "nota": 4},
-        "Revisão geral com substituição eventual de peças desgastadas (troca de componentes)": {"classe": "DEFICIENTE",
-                                                                                                "nota": 3},
+        "Revisão geral com substituição eventual de peças desgastadas (troca de componentes)": {"classe": "DEFICIENTE", "nota": 3},
         "Substituição de peças aparentes (componentes deteriorados)": {"classe": "RUIM", "nota": 2},
         "Substituição completa das instalações (sistemas deteriorados)": {"classe": "MUITO RUIM", "nota": 1}
     },
@@ -157,15 +134,34 @@ TABELA_FINAL = {
 
 st.set_page_config(page_title="Classificador de Obsolescência", page_icon="🏢", layout="wide")
 
-# Estilização limpa e profissional
+# O CSS foi aprimorado. O 'var(--text-color)' e 'var(--background-color)' 
+# fazem o Streamlit respeitar o tema Claro/Escuro do celular do usuário.
+# O Javascript no final lida com a mudança de cor do seletor.
 st.markdown("""
     <style>
     .big-font { font-size:20px !important; font-weight: bold; color: #1E3A8A; }
-    .resultado-box { background-color: #F0FDF4; padding: 20px; border-radius: 10px; border-left: 5px solid #16A34A;}
+    
+    /* Caixa de resultado adaptável a tema claro/escuro */
+    .resultado-box { 
+        background-color: rgba(22, 163, 74, 0.1); /* Verde suave transparente */
+        color: var(--text-color);
+        padding: 20px; 
+        border-radius: 10px; 
+        border-left: 5px solid #16A34A;
+    }
+    
+    /* O CSS abaixo é um 'truque' para colorir de verde os dropdowns preenchidos */
+    div[data-baseweb="select"] {
+        transition: all 0.3s ease;
+    }
+    .st-select-selecionado div[data-baseweb="select"] > div {
+        background-color: rgba(34, 197, 94, 0.15) !important; /* Fundo verdinho claro */
+        border-color: #22C55E !important; /* Borda verde */
+    }
     </style>
 """, unsafe_allow_html=True)
 
-st.title("🏢 Assistente de Classificação - Fator de Obsolescência")
+st.title("🏢 Assistente de Classificação do Fator de Obsolescência do Imóvel")
 st.markdown(
     "Selecione a descrição real do imóvel. O cálculo do Fob é executado automaticamente.")
 st.divider()
@@ -176,18 +172,29 @@ st.divider()
 
 selecoes = {}
 
-# Dividindo em duas colunas para o formulário não ficar muito longo na tela
+# Dividindo em duas colunas
 col1, col2 = st.columns(2)
 elementos = list(PESOS.keys())
 meio = len(elementos) // 2 + 1
+
+# String padrão para verificar se o vistoriador preencheu
+MENSAGEM_PADRAO = "Selecione a classificação..."
 
 for i, elemento in enumerate(elementos):
     coluna_atual = col1 if i < meio else col2
     with coluna_atual:
         st.markdown(f"<span class='big-font'>{elemento} (Peso: {PESOS[elemento]}%)</span>", unsafe_allow_html=True)
-        opcoes_texto = list(OPCOES[elemento].keys())
-        escolha = st.selectbox(f"Selecione o estado - {elemento}", opcoes_texto, label_visibility="collapsed")
+        
+        # Inserindo a mensagem padrão como a primeira opção da lista
+        opcoes_texto = [MENSAGEM_PADRAO] + list(OPCOES[elemento].keys())
+        
+        escolha = st.selectbox(f"Selecione o estado - {elemento}", opcoes_texto, label_visibility="collapsed", key=f"sel_{elemento}")
         selecoes[elemento] = escolha
+        
+        # Injeção de HTML para adicionar uma "classe" CSS que pinta o seletor de verde caso não seja a opção padrão
+        if escolha != MENSAGEM_PADRAO:
+            st.markdown(f'<style>div[data-testid="stSelectbox"]:has(div[id*="sel_{elemento}"]) {{ background-color: rgba(34, 197, 94, 0.15); border-radius: 0.5rem; }}</style>', unsafe_allow_html=True)
+            
         st.write("")  # Espaçamento
 
 st.divider()
@@ -197,40 +204,46 @@ st.divider()
 # ==========================================
 
 if st.button("CALCULAR CLASSIFICAÇÃO GERAL", type="primary", use_container_width=True):
-    soma_pesos = 0
-    soma_contribuicoes = 0
+    # Verificação de Segurança: Garante que todos os campos foram preenchidos
+    itens_pendentes = [item for item, desc em selecoes.items() if desc == MENSAGEM_PADRAO]
+    
+    if itens_pendentes:
+        st.error(f"⚠️ Atenção! Você esqueceu de preencher os seguintes itens: **{', '.join(itens_pendentes)}**.")
+    else:
+        soma_pesos = 0
+        soma_contribuicoes = 0
 
-    # Processa exatamente como no Excel
-    for elemento, descricao in selecoes.items():
-        peso = PESOS[elemento]
-        dados_opcao = OPCOES[elemento][descricao]
-        nota = dados_opcao["nota"]
+        # Processa exatamente como no Excel
+        for elemento, descricao in selecoes.items():
+            peso = PESOS[elemento]
+            dados_opcao = OPCOES[elemento][descricao]
+            nota = dados_opcao["nota"]
 
-        contribuicao = nota * peso
-        soma_pesos += peso
-        soma_contribuicoes += contribuicao
+            contribuicao = nota * peso
+            soma_pesos += peso
+            soma_contribuicoes += contribuicao
 
-    nota_final = soma_contribuicoes / soma_pesos if soma_pesos > 0 else 0
-    nota_arredondada = int(round(nota_final))
+        nota_final = soma_contribuicoes / soma_pesos if soma_pesos > 0 else 0
+        nota_arredondada = int(round(nota_final))
 
-    # Prevenção de erro se a nota sair dos limites (1 a 8)
-    nota_arredondada = max(1, min(8, nota_arredondada))
+        # Prevenção de erro se a nota sair dos limites (1 a 8)
+        nota_arredondada = max(1, min(8, nota_arredondada))
 
-    resultado_final = TABELA_FINAL[nota_arredondada]
+        resultado_final = TABELA_FINAL[nota_arredondada]
 
-    st.subheader("📊 Resultados Matemáticos")
-    res_c1, res_c2, res_c3 = st.columns(3)
-    res_c1.metric(label="Soma Pesos Utilizados", value=f"{soma_pesos}%")
-    res_c2.metric(label="Soma Contribuições", value=f"{soma_contribuicoes}")
-    res_c3.metric(label="Nota Final (Média)", value=f"{nota_final:.2f}")
+        st.subheader("📊 Resultados Matemáticos")
+        res_c1, res_c2, res_c3 = st.columns(3)
+        res_c1.metric(label="Soma Pesos Utilizados", value=f"{soma_pesos}%")
+        res_c2.metric(label="Soma Contribuições", value=f"{soma_contribuicoes}")
+        res_c3.metric(label="Nota Final (Média)", value=f"{nota_final:.2f}")
 
-    st.markdown("---")
+        st.markdown("---")
 
-    st.markdown("### 🏆 Enquadramento Oficial (Decreto)")
-    st.markdown(f"""
-        <div class="resultado-box">
-            <h2>Classificação: {resultado_final['classe']}</h2>
-            <h4>Índice Fob: {resultado_final['indice']}</h4>
-            <p><strong>Descrição Legal:</strong> {resultado_final['texto']}</p>
-        </div>
-    """, unsafe_allow_html=True)
+        st.markdown("### 🏆 Enquadramento do Fator de Obsolescência do Imóvel (Decreto)")
+        st.markdown(f"""
+            <div class="resultado-box">
+                <h2>Classificação: {resultado_final['classe']}</h2>
+                <h4>Índice Fob: {resultado_final['indice']}</h4>
+                <p><strong>Descrição Legal:</strong> {resultado_final['texto']}</p>
+            </div>
+        """, unsafe_allow_html=True)
