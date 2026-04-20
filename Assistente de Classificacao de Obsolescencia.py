@@ -131,6 +131,24 @@ TABELA_FINAL = {
         "texto": "Edificação cujo estado geral possa ser recuperado com estabilização e/ou recuperação do sistema estrutural, substituição da regularização da alvenaria, reparos de fissuras. Substituição das instalações hidráulicas e elétricas. Substituição dos revestimentos de pisos e paredes. Substituição da impermeabilização ou do telhado. "}
 }
 
+# Lista de analistas em ordem alfabética
+ANALISTAS = [
+    "BRUNO ARMOA",
+    "GISELE ALMEIDA",
+    "HANDRIELLY RIBEIRO",
+    "HELEZ LELES",
+    "LALCIANE",
+    "LEONAN BRENNER",
+    "LUCIENE RIBEIRO",
+    "LUIZ CARLOS",
+    "MARCIO ROBERTO",
+    "MARCOS TADEU",
+    "NADYNY INSAURALDE",
+    "RAFAELA PEREIRA",
+    "THAYLLA ANDRESSA",
+    "WALBER SOUZA"
+]
+
 # ==========================================
 # 2. CONFIGURAÇÃO DA INTERFACE (UX/UI) E FUNÇÕES
 # ==========================================
@@ -138,10 +156,12 @@ TABELA_FINAL = {
 st.set_page_config(page_title="Classificador de Obsolescência", page_icon="🏢", layout="wide")
 
 MENSAGEM_PADRAO = "Selecione a classificação"
+MENSAGEM_ANALISTA = "Selecione o Analista..."
 
 # Função de reset forte: Força explicitamente todos os campos a voltarem ao padrão
 def limpar_dados():
     st.session_state["inscricao"] = ""
+    st.session_state["analista"] = MENSAGEM_ANALISTA
     st.session_state["mostrar_resultados"] = False
     for elemento in PESOS.keys():
         st.session_state[f"sel_{elemento}"] = MENSAGEM_PADRAO
@@ -189,16 +209,21 @@ st.divider()
 # ==========================================
 # 3. IDENTIFICAÇÃO DA VISTORIA
 # ==========================================
-st.markdown("### 📋 Identificação do Imóvel")
-col_cad1, col_cad2 = st.columns(2)
+st.markdown("### 📋 Identificação do Imóvel e Analista")
+
+# Agora usando 3 colunas para acomodar o novo campo
+col_cad1, col_cad2, col_cad3 = st.columns(3)
 
 with col_cad1:
     inscricao = st.text_input("Inscrição Cadastral do Imóvel", key="inscricao", placeholder="Ex: 01.02.003.004-5")
-    # Validação imediata: se o vistoriador digitar letras, a tela já emite um alerta vermelho
     if re.search(r'[A-Za-z]', inscricao):
-        st.error("⚠️ A inscrição cadastral não deve conter letras. Utilize apenas números e caracteres de separação.")
+        st.error("⚠️ A inscrição não deve conter letras. Utilize apenas números e caracteres de separação.")
 
 with col_cad2:
+    opcoes_analista = [MENSAGEM_ANALISTA] + ANALISTAS
+    analista = st.selectbox("Analista Responsável", opcoes_analista, key="analista")
+
+with col_cad3:
     data_analise = st.date_input("Data da Análise", format="DD/MM/YYYY")
 
 st.divider()
@@ -234,7 +259,6 @@ st.divider()
 # 5. BOTÕES E CÁLCULO DE RESULTADOS
 # ==========================================
 
-# Mantém o status da análise salvo na memória
 if "mostrar_resultados" not in st.session_state:
     st.session_state["mostrar_resultados"] = False
 
@@ -249,12 +273,15 @@ with col_btn2:
 if btn_calcular:
     itens_pendentes = [item for item, desc in selecoes.items() if desc == MENSAGEM_PADRAO]
     
-    # Validações de Segurança
+    # Validações de Segurança atualizadas
     if not inscricao.strip():
         st.error("⚠️ Atenção! Você esqueceu de preencher a Inscrição Cadastral.")
         st.session_state["mostrar_resultados"] = False
     elif re.search(r'[A-Za-z]', inscricao):
         st.error("⚠️ Atenção! Corrija a Inscrição Cadastral (letras não são permitidas).")
+        st.session_state["mostrar_resultados"] = False
+    elif analista == MENSAGEM_ANALISTA:
+        st.error("⚠️ Atenção! Você esqueceu de selecionar o Analista Responsável.")
         st.session_state["mostrar_resultados"] = False
     elif itens_pendentes:
         st.error(f"⚠️ Atenção! Você esqueceu de preencher os seguintes itens: **{', '.join(itens_pendentes)}**.")
@@ -303,7 +330,6 @@ if st.session_state["mostrar_resultados"]:
     # GERADOR DE RELATÓRIO PDF (OTIMIZADO PARA 1 PÁGINA)
     # ==========================================
     def gerar_pdf_bytes():
-        # Setando folha A4 e definindo margens menores (esq: 15, topo: 10, dir: 15)
         pdf = FPDF(orientation="P", unit="mm", format="A4")
         pdf.set_margins(15, 10, 15)
         pdf.add_page()
@@ -311,7 +337,7 @@ if st.session_state["mostrar_resultados"]:
         def limpa_txt(texto):
             return str(texto).encode('latin-1', 'replace').decode('latin-1')
 
-        # Inserindo as Logos Centralizadas Lado a Lado
+        # Inserindo as Logos Centralizadas
         try:
             pdf.image("LOGO TECNOMAPAS.png", x=65, y=10, w=35)
         except: pass
@@ -319,17 +345,17 @@ if st.session_state["mostrar_resultados"]:
             pdf.image("SECRETARIA MUNICIPAL DE CUIABÁ.png", x=110, y=10, w=35)
         except: pass
 
-        # === CORREÇÃO DO ESPAÇO: Posiciona o título logo abaixo da imagem ===
         pdf.set_y(28) 
 
         # Título
         pdf.set_font("Arial", "B", 14)
         pdf.cell(0, 8, limpa_txt("Relatório de Classificação - Fator de Obsolescência"), ln=1, align="C")
-        pdf.ln(4) # Espaço menor após o título
+        pdf.ln(4)
 
-        # Dados Básicos (Inscrição e Data)
+        # Dados Básicos (Inscrição, Analista e Data)
         pdf.set_font("Arial", "B", 11)
         pdf.cell(0, 6, limpa_txt(f"Inscrição Cadastral: {inscricao}"), ln=1)
+        pdf.cell(0, 6, limpa_txt(f"Analista Responsável: {analista}"), ln=1)
         pdf.cell(0, 6, limpa_txt(f"Data da Análise: {data_analise.strftime('%d/%m/%Y')}"), ln=1)
         pdf.ln(3)
 
@@ -343,7 +369,7 @@ if st.session_state["mostrar_resultados"]:
             pdf.cell(0, 5, limpa_txt(f"{k}:"), ln=1)
             pdf.set_font("Arial", "", 9)
             pdf.multi_cell(0, 5, limpa_txt(str(v)))
-            pdf.ln(1) # Espaço mínimo entre itens
+            pdf.ln(1)
 
         # Resultados Matemáticos
         pdf.ln(2)
@@ -368,7 +394,7 @@ if st.session_state["mostrar_resultados"]:
         pdf_bytes = pdf.output()
         return bytes(pdf_bytes)
 
-    # Disponibilizando o botão de Download
+    # Botão de Download
     st.markdown("---")
     st.markdown("### 📥 Documento Oficial")
     
