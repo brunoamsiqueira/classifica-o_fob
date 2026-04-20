@@ -133,20 +133,19 @@ TABELA_FINAL = {
 
 # Lista de analistas em ordem alfabética
 ANALISTAS = [
-    "BRUNO ARMOA",
-    "GISELE ALMEIDA",
-    "HANDRIELLY RIBEIRO",
-    "HELEZ LELES",
-    "LALCIANE",
-    "LEONAN BRENNER",
-    "LUCIENE RIBEIRO",
-    "LUIZ CARLOS",
-    "MARCIO ROBERTO",
-    "MARCOS TADEU",
-    "NADYNY INSAURALDE",
-    "RAFAELA PEREIRA",
-    "THAYLLA ANDRESSA",
-    "WALBER SOUZA"
+    "Bruno Armoa",
+    "Gisele Almeida",
+    "Handrielly Ribeiro",
+    "Helez Leles",
+    "Leonan Brenner",
+    "Luciene Ribeiro",
+    "Luiz Carlos",
+    "Marcio Roberto",
+    "Marcos Tadeu",
+    "Nadyny Insauralde",
+    "Rafaela Pereira",
+    "Thaylla Andressa",
+    "Walber Souza
 ]
 
 # ==========================================
