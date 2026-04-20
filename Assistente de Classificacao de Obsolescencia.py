@@ -300,20 +300,18 @@ if st.session_state["mostrar_resultados"]:
     """, unsafe_allow_html=True)
 
     # ==========================================
-    # GERADOR DE RELATÓRIO PDF EXECUTIVO
+    # GERADOR DE RELATÓRIO PDF (OTIMIZADO PARA 1 PÁGINA)
     # ==========================================
     def gerar_pdf_bytes():
-        # Setando folha A4 (P = Retrato, mm = milímetros, A4 = Tamanho)
+        # Setando folha A4 e definindo margens menores (esq: 15, topo: 10, dir: 15)
         pdf = FPDF(orientation="P", unit="mm", format="A4")
+        pdf.set_margins(15, 10, 15)
         pdf.add_page()
-        pdf.set_font("Arial", size=12)
-
-        # Função de proteção para os acentos em português funcionarem no PDF
+        
         def limpa_txt(texto):
             return str(texto).encode('latin-1', 'replace').decode('latin-1')
 
         # Inserindo as Logos Centralizadas Lado a Lado
-        # Largura folha: 210mm. Largura das duas logos + espaço = 80mm. Margem Esquerda = 65mm.
         try:
             pdf.image("LOGO TECNOMAPAS.png", x=65, y=10, w=35)
         except: pass
@@ -321,54 +319,52 @@ if st.session_state["mostrar_resultados"]:
             pdf.image("SECRETARIA MUNICIPAL DE CUIABÁ.png", x=110, y=10, w=35)
         except: pass
 
-        # Descer o cursor de texto para ficar abaixo das imagens
-        pdf.set_y(45)
+        # === CORREÇÃO DO ESPAÇO: Posiciona o título logo abaixo da imagem ===
+        pdf.set_y(28) 
 
         # Título
-        pdf.set_font("Arial", "B", 15)
-        pdf.cell(0, 10, limpa_txt("Relatório de Classificação - Fator de Obsolescência"), ln=1, align="C")
-        pdf.ln(10)
+        pdf.set_font("Arial", "B", 14)
+        pdf.cell(0, 8, limpa_txt("Relatório de Classificação - Fator de Obsolescência"), ln=1, align="C")
+        pdf.ln(4) # Espaço menor após o título
 
         # Dados Básicos (Inscrição e Data)
-        pdf.set_font("Arial", "B", 12)
-        pdf.cell(0, 8, limpa_txt(f"Inscrição Cadastral: {inscricao}"), ln=1)
-        pdf.cell(0, 8, limpa_txt(f"Data da Análise: {data_analise.strftime('%d/%m/%Y')}"), ln=1)
-        pdf.ln(5)
+        pdf.set_font("Arial", "B", 11)
+        pdf.cell(0, 6, limpa_txt(f"Inscrição Cadastral: {inscricao}"), ln=1)
+        pdf.cell(0, 6, limpa_txt(f"Data da Análise: {data_analise.strftime('%d/%m/%Y')}"), ln=1)
+        pdf.ln(3)
 
         # Opções Estruturais Selecionadas
-        pdf.set_fill_color(240, 240, 240) # Fundo cinza clarinho
-        pdf.cell(0, 8, limpa_txt("Itens Estruturais Avaliados:"), fill=True, ln=1)
-        pdf.ln(3)
+        pdf.set_fill_color(240, 240, 240)
+        pdf.cell(0, 7, limpa_txt("Itens Estruturais Avaliados:"), fill=True, ln=1)
+        pdf.ln(2)
         
         for k, v in selecoes.items():
-            pdf.set_font("Arial", "B", 10)
-            pdf.cell(0, 6, limpa_txt(f"{k}:"), ln=1)
-            pdf.set_font("Arial", "", 10)
-            # multi_cell permite que o texto grande quebre de linha automaticamente
-            pdf.multi_cell(0, 6, limpa_txt(str(v)))
-            pdf.ln(2)
+            pdf.set_font("Arial", "B", 9)
+            pdf.cell(0, 5, limpa_txt(f"{k}:"), ln=1)
+            pdf.set_font("Arial", "", 9)
+            pdf.multi_cell(0, 5, limpa_txt(str(v)))
+            pdf.ln(1) # Espaço mínimo entre itens
 
         # Resultados Matemáticos
-        pdf.ln(5)
-        pdf.set_font("Arial", "B", 12)
-        pdf.cell(0, 8, limpa_txt("Resultados Matemáticos:"), fill=True, ln=1)
-        pdf.ln(3)
+        pdf.ln(2)
+        pdf.set_font("Arial", "B", 11)
+        pdf.cell(0, 7, limpa_txt("Resultados Matemáticos:"), fill=True, ln=1)
+        pdf.ln(2)
         pdf.set_font("Arial", "", 10)
-        pdf.cell(0, 6, limpa_txt(f"Soma Pesos Utilizados: {soma_pesos}%"), ln=1)
-        pdf.cell(0, 6, limpa_txt(f"Soma Contribuições: {soma_contribuicoes}"), ln=1)
-        pdf.cell(0, 6, limpa_txt(f"Nota Final (Média): {nota_final:.2f}"), ln=1)
+        pdf.cell(0, 5, limpa_txt(f"Soma Pesos Utilizados: {soma_pesos}%"), ln=1)
+        pdf.cell(0, 5, limpa_txt(f"Soma Contribuições: {soma_contribuicoes}"), ln=1)
+        pdf.cell(0, 5, limpa_txt(f"Nota Final (Média): {nota_final:.2f}"), ln=1)
 
         # Caixa do Resultado Final (Verde)
-        pdf.ln(5)
-        pdf.set_fill_color(230, 245, 230) # Fundo Verde Clarinho igual da web
-        pdf.set_font("Arial", "B", 14)
-        pdf.cell(0, 10, limpa_txt(f"Classificação Oficial: {resultado_final['classe']}"), fill=True, align="C", ln=1)
-        pdf.set_font("Arial", "", 12)
-        pdf.cell(0, 10, limpa_txt(f"Índice Fob: {resultado_final['indice']}"), fill=True, align="C", ln=1)
+        pdf.ln(3)
+        pdf.set_fill_color(230, 245, 230)
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(0, 8, limpa_txt(f"Classificação Oficial: {resultado_final['classe']}"), fill=True, align="C", ln=1)
+        pdf.set_font("Arial", "", 11)
+        pdf.cell(0, 8, limpa_txt(f"Índice Fob: {resultado_final['indice']}"), fill=True, align="C", ln=1)
         pdf.set_font("Arial", "I", 10)
-        pdf.multi_cell(0, 8, limpa_txt(f"Descrição Legal: {resultado_final['texto']}"), fill=True)
+        pdf.multi_cell(0, 6, limpa_txt(f"Descrição Legal: {resultado_final['texto']}"), fill=True)
 
-        # Gera e retorna os dados do PDF
         pdf_bytes = pdf.output()
         return bytes(pdf_bytes)
 
