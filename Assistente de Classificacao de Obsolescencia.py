@@ -145,7 +145,7 @@ ANALISTAS = [
     "Nadyny Insauralde",
     "Rafaela Pereira",
     "Thaylla Andressa",
-    "Walber Souza
+    "Walber Souza"
 ]
 
 # ==========================================
