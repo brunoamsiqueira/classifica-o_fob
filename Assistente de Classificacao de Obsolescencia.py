@@ -1,4 +1,7 @@
 import streamlit as st
+import re
+import datetime
+from fpdf import FPDF
 
 # ==========================================
 # 1. BASE DE DADOS E REGRAS (EXTRAÍDAS DO EXCEL)
@@ -132,12 +135,14 @@ TABELA_FINAL = {
 # 2. CONFIGURAÇÃO DA INTERFACE (UX/UI) E FUNÇÕES
 # ==========================================
 
-st.set_page_config(page_title="Classificador de Obsolescência", page_icon=" ", layout="wide")
+st.set_page_config(page_title="Classificador de Obsolescência", page_icon="🏢", layout="wide")
 
 MENSAGEM_PADRAO = "Selecione a classificação"
 
 # Função de reset forte: Força explicitamente todos os campos a voltarem ao padrão
 def limpar_dados():
+    st.session_state["inscricao"] = ""
+    st.session_state["mostrar_resultados"] = False
     for elemento in PESOS.keys():
         st.session_state[f"sel_{elemento}"] = MENSAGEM_PADRAO
 
@@ -163,11 +168,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# ==========================================
 # CABEÇALHO COM AS LOGOS
-st.write("") # Espaçamento inicial
+# ==========================================
+st.write("") 
 
-# Criando colunas: Laterais vazias (peso 2) e Centrais para as logos (peso 1)
-# Isso "espreme" as imagens no meio da tela de forma elegante
 espaco_esq, col_logo1, col_logo2, espaco_dir = st.columns([2.5, 1, 1, 2.5], vertical_alignment="center")
 
 with col_logo1:
@@ -176,14 +181,30 @@ with col_logo1:
 with col_logo2:
     st.image("SECRETARIA MUNICIPAL DE CUIABÁ.png", use_container_width=True)
 
-# Título logo abaixo das imagens
 st.markdown("<h2 style='text-align: center;'>Assistente de Classificação do Fator de Obsolescência do Imóvel</h2>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center;'>Selecione a descrição real do imóvel. Selecionados todos os elementos estruturais desça a página e clique no botão <strong>CALCULAR CLASSIFICAÇÃO GERAL</strong>. O cálculo do Fob é executado automaticamente.</p>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center;'>Selecione a descrição real do imóvel. Selecionados todos os elementos estruturais, desça a página e clique no botão <strong>CALCULAR CLASSIFICAÇÃO GERAL</strong>. O cálculo do Fob é executado automaticamente.</p>", unsafe_allow_html=True)
 
 st.divider()
 
 # ==========================================
-# 3. CONSTRUÇÃO DO FORMULÁRIO
+# 3. IDENTIFICAÇÃO DA VISTORIA
+# ==========================================
+st.markdown("### 📋 Identificação do Imóvel")
+col_cad1, col_cad2 = st.columns(2)
+
+with col_cad1:
+    inscricao = st.text_input("Inscrição Cadastral do Imóvel", key="inscricao", placeholder="Ex: 01.02.003.004-5")
+    # Validação imediata: se o vistoriador digitar letras, a tela já emite um alerta vermelho
+    if re.search(r'[A-Za-z]', inscricao):
+        st.error("⚠️ A inscrição cadastral não deve conter letras. Utilize apenas números e caracteres de separação.")
+
+with col_cad2:
+    data_analise = st.date_input("Data da Análise", format="DD/MM/YYYY")
+
+st.divider()
+
+# ==========================================
+# 4. CONSTRUÇÃO DO FORMULÁRIO ESTRUTURAL
 # ==========================================
 
 selecoes = {}
@@ -210,57 +231,152 @@ for i, elemento in enumerate(elementos):
 st.divider()
 
 # ==========================================
-# 4. BOTÕES E CÁLCULO DE RESULTADOS
+# 5. BOTÕES E CÁLCULO DE RESULTADOS
 # ==========================================
 
-# Criando colunas para os botões ficarem lado a lado
+# Mantém o status da análise salvo na memória
+if "mostrar_resultados" not in st.session_state:
+    st.session_state["mostrar_resultados"] = False
+
 col_btn1, col_btn2 = st.columns(2)
 
 with col_btn1:
     btn_calcular = st.button("CALCULAR CLASSIFICAÇÃO GERAL", type="primary", use_container_width=True)
 
 with col_btn2:
-    # O on_click ativa a função limpar_dados antes de atualizar a página, forçando a interface a limpar os campos
     st.button("🔄 NOVA AVALIAÇÃO", on_click=limpar_dados, use_container_width=True)
 
 if btn_calcular:
     itens_pendentes = [item for item, desc in selecoes.items() if desc == MENSAGEM_PADRAO]
     
-    if itens_pendentes:
+    # Validações de Segurança
+    if not inscricao.strip():
+        st.error("⚠️ Atenção! Você esqueceu de preencher a Inscrição Cadastral.")
+        st.session_state["mostrar_resultados"] = False
+    elif re.search(r'[A-Za-z]', inscricao):
+        st.error("⚠️ Atenção! Corrija a Inscrição Cadastral (letras não são permitidas).")
+        st.session_state["mostrar_resultados"] = False
+    elif itens_pendentes:
         st.error(f"⚠️ Atenção! Você esqueceu de preencher os seguintes itens: **{', '.join(itens_pendentes)}**.")
+        st.session_state["mostrar_resultados"] = False
     else:
-        soma_pesos = 0
-        soma_contribuicoes = 0
+        st.session_state["mostrar_resultados"] = True
 
-        for elemento, descricao in selecoes.items():
-            peso = PESOS[elemento]
-            dados_opcao = OPCOES[elemento][descricao]
-            nota = dados_opcao["nota"]
+# Se tudo estiver correto, exibe os resultados e gera o PDF
+if st.session_state["mostrar_resultados"]:
+    soma_pesos = 0
+    soma_contribuicoes = 0
 
-            contribuicao = nota * peso
-            soma_pesos += peso
-            soma_contribuicoes += contribuicao
+    for elemento, descricao in selecoes.items():
+        peso = PESOS[elemento]
+        dados_opcao = OPCOES[elemento][descricao]
+        nota = dados_opcao["nota"]
 
-        nota_final = soma_contribuicoes / soma_pesos if soma_pesos > 0 else 0
-        nota_arredondada = int(round(nota_final))
+        contribuicao = nota * peso
+        soma_pesos += peso
+        soma_contribuicoes += contribuicao
 
-        nota_arredondada = max(1, min(8, nota_arredondada))
+    nota_final = soma_contribuicoes / soma_pesos if soma_pesos > 0 else 0
+    nota_arredondada = int(round(nota_final))
+    nota_arredondada = max(1, min(8, nota_arredondada))
 
-        resultado_final = TABELA_FINAL[nota_arredondada]
+    resultado_final = TABELA_FINAL[nota_arredondada]
 
-        st.subheader("📊 Resultados Matemáticos")
-        res_c1, res_c2, res_c3 = st.columns(3)
-        res_c1.metric(label="Soma Pesos Utilizados", value=f"{soma_pesos}%")
-        res_c2.metric(label="Soma Contribuições", value=f"{soma_contribuicoes}")
-        res_c3.metric(label="Nota Final (Média)", value=f"{nota_final:.2f}")
+    st.subheader("📊 Resultados Matemáticos")
+    res_c1, res_c2, res_c3 = st.columns(3)
+    res_c1.metric(label="Soma Pesos Utilizados", value=f"{soma_pesos}%")
+    res_c2.metric(label="Soma Contribuições", value=f"{soma_contribuicoes}")
+    res_c3.metric(label="Nota Final (Média)", value=f"{nota_final:.2f}")
 
-        st.markdown("---")
+    st.markdown("---")
 
-        st.markdown("### Enquadramento do Fator de Obsolescência de Acordo com o Decreto Nº 11.665 de 30 de Dezembro de 2025")
-        st.markdown(f"""
-            <div class="resultado-box">
-                <h2>Classificação: {resultado_final['classe']}</h2>
-                <h4>Índice Fob: {resultado_final['indice']}</h4>
-                <p><strong>Descrição Legal:</strong> {resultado_final['texto']}</p>
-            </div>
-        """, unsafe_allow_html=True)
+    st.markdown("### Enquadramento do Fator de Obsolescência de Acordo com o Decreto Nº 11.665 de 30 de Dezembro de 2025")
+    st.markdown(f"""
+        <div class="resultado-box">
+            <h2>Classificação: {resultado_final['classe']}</h2>
+            <h4>Índice Fob: {resultado_final['indice']}</h4>
+            <p><strong>Descrição Legal:</strong> {resultado_final['texto']}</p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    # ==========================================
+    # GERADOR DE RELATÓRIO PDF (Com FPDF)
+    # ==========================================
+    def gerar_pdf_bytes():
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+
+        # Função de proteção para evitar quebra de texto (Acentos do Português no PDF)
+        def limpa_txt(texto):
+            return str(texto).encode('latin-1', 'replace').decode('latin-1')
+
+        # Inserindo as Logos
+        try:
+            pdf.image("LOGO TECNOMAPAS.png", 10, 8, 33)
+        except: pass
+        try:
+            pdf.image("SECRETARIA MUNICIPAL DE CUIABÁ.png", 165, 8, 33)
+        except: pass
+
+        # Título
+        pdf.set_font("Arial", "B", 15)
+        pdf.cell(0, 10, limpa_txt("Relatório de Classificação - Fob"), ln=1, align="C")
+        pdf.ln(15)
+
+        # Dados Básicos
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(0, 8, limpa_txt(f"Inscrição Cadastral: {inscricao}"), ln=1)
+        pdf.cell(0, 8, limpa_txt(f"Data da Análise: {data_analise.strftime('%d/%m/%Y')}"), ln=1)
+        pdf.ln(5)
+
+        # Opções Selecionadas
+        pdf.set_fill_color(240, 240, 240)
+        pdf.cell(0, 8, limpa_txt("Itens Estruturais Avaliados:"), fill=True, ln=1)
+        pdf.ln(2)
+        
+        for k, v in selecoes.items():
+            pdf.set_font("Arial", "B", 10)
+            pdf.cell(0, 6, limpa_txt(f"{k}:"), ln=1)
+            pdf.set_font("Arial", "", 10)
+            pdf.multi_cell(0, 6, limpa_txt(str(v)))
+            pdf.ln(2)
+
+        # Resultados Matemáticos
+        pdf.ln(5)
+        pdf.set_font("Arial", "B", 12)
+        pdf.cell(0, 8, limpa_txt("Resultados Matemáticos:"), fill=True, ln=1)
+        pdf.ln(2)
+        pdf.set_font("Arial", "", 10)
+        pdf.cell(0, 6, limpa_txt(f"Soma Pesos Utilizados: {soma_pesos}%"), ln=1)
+        pdf.cell(0, 6, limpa_txt(f"Soma Contribuições: {soma_contribuicoes}"), ln=1)
+        pdf.cell(0, 6, limpa_txt(f"Nota Final (Média): {nota_final:.2f}"), ln=1)
+
+        # Resultado Final
+        pdf.ln(5)
+        pdf.set_fill_color(220, 240, 220) # Fundo Verde Clarinho igual da web
+        pdf.set_font("Arial", "B", 14)
+        pdf.cell(0, 10, limpa_txt(f"Classificação: {resultado_final['classe']}"), fill=True, align="C", ln=1)
+        pdf.set_font("Arial", "", 12)
+        pdf.cell(0, 10, limpa_txt(f"Índice Fob: {resultado_final['indice']}"), fill=True, align="C", ln=1)
+        pdf.set_font("Arial", "I", 10)
+        pdf.multi_cell(0, 8, limpa_txt(f"Descrição Legal: {resultado_final['texto']}"), fill=True)
+
+        # Tratamento seguro para baixar o arquivo binário gerado
+        pdf_gerado = pdf.output(dest='S')
+        if type(pdf_gerado) == bytearray:
+            return bytes(pdf_gerado)
+        return pdf_gerado.encode('latin-1')
+
+    # Disponibilizando o botão de Download
+    st.markdown("---")
+    st.markdown("### 📥 Documento Oficial")
+    
+    st.download_button(
+        label="📄 BAIXAR RELATÓRIO EM PDF",
+        data=gerar_pdf_bytes(),
+        file_name=f"Relatorio_Vistoria_{inscricao}.pdf",
+        mime="application/pdf",
+        type="primary",
+        use_container_width=True
+    )
